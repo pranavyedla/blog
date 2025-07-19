@@ -10,6 +10,7 @@ const Blogs = () => {
       <h1 className="text-3xl text-center font-bold my-6">All Blogs</h1>
       <div className="grid my-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 px-3 sm:px-10">
         {blogData
+          .reverse()
           .map((blog, index) => (
             <BlogCard
               key={index}

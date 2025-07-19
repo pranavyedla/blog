@@ -11,7 +11,6 @@ const LatestBlogs = () => {
       <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:px-10">
         {blogData
           .slice(-6)
-          .reverse()
           .map((blog, index) => (
             <BlogCard
               key={index}
