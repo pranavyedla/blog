@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const Dashboard = () => {
@@ -12,17 +12,17 @@ const Dashboard = () => {
     image: null,
   });
   const [blogs, setBlogs] = useState([]);
+
   const onChangeHandler = (e) => {
-    console.log(e.target.value);
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
   const fileHandler = (e) => {
     setFormData({ ...formData, image: e.target.files[0] });
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
     const data = new FormData();
     data.append("title", formData.title);
     data.append("category", formData.category);
@@ -30,8 +30,8 @@ const Dashboard = () => {
     data.append("image", formData.image);
     try {
       const res = await axios.post(
-        "http://localhost:4000/blog/create",
-        formData,
+        `${import.meta.env.VITE_API_URL}/blog/create`,
+        data,
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -39,38 +39,46 @@ const Dashboard = () => {
           },
         }
       );
-      console.log("res", res);
       toast.success(res.data.message);
-      (formData.title = ""),
-        (formData.category = ""),
-        (formData.description = ""),
-        (formData.image = null);
+      setFormData({
+        title: "",
+        category: "",
+        description: "",
+        image: null,
+      });
+      // Optionally reload blogs after post
+      fetchBlogs();
     } catch (error) {
       toast.error(error.message);
     }
   };
 
-  useEffect(() => {
-    const allBlogs = async () => {
-      try {
-        const res = await axios.get("http://localhost:4000/blog/all", {
+  const fetchBlogs = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/blog/all`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        });
+        }
+      );
+      setBlogs(Array.isArray(res.data.blogs) ? res.data.blogs : []);
+    } catch (error) {
+      setBlogs([]); // Defensive: set to empty if error
+      console.log("error", error);
+    }
+  };
 
-        setBlogs(res.data.blogs);
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-    allBlogs();
+  useEffect(() => {
+    fetchBlogs();
+    // eslint-disable-next-line
   }, []);
 
   const removeBlog = async (blogId) => {
     try {
       const res = await axios.delete(
-        `http://localhost:4000/blog/delete/${blogId}`,
+        `${import.meta.env.VITE_API_URL}/blog/delete/${blogId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -78,11 +86,14 @@ const Dashboard = () => {
         }
       );
       toast.success(res.data.message);
-      setBlogs(blogs.filter((blog) => blog._id !== blogId));
+      setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog._id !== blogId));
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(
+        error?.response?.data?.message || "Failed to delete blog"
+      );
     }
   };
+
   return (
     <div className="flex h-auto">
       {/* side bar */}
@@ -135,13 +146,12 @@ const Dashboard = () => {
                   name="description"
                   value={formData.description}
                   onChange={onChangeHandler}
-                  type="text"
                   placeholder="description"
                   className="border border-gray-300 rounded-md p-2 outline-none w-full"
                 />
 
                 <div>
-                  <label htmlFor="">Choose Image</label>
+                  <label>Choose Image</label>
                   <input
                     onChange={fileHandler}
                     type="file"
@@ -169,25 +179,33 @@ const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {blogs.map((blog) => (
-                    <tr key={blog._id} className="text-center">
-                      <td className="border px-4 py-2">{blog.title}</td>
-                      <td className="border px-4 py-2">{blog.category}</td>
-                      <td className="border px-4 py-2">
-                        <img
-                          src={`http://localhost:4000/images/${blog.image}`}
-                          alt={blog.title}
-                          className="w-16 h-16 object-cover mx-auto"
-                        />
-                      </td>
-                      <td
-                        className="border px-4 py-2 cursor-pointer"
-                        onClick={() => removeBlog(blog._id)}
-                      >
-                        X
+                  {(Array.isArray(blogs) ? blogs : []).length > 0 ? (
+                    blogs.map((blog) => (
+                      <tr key={blog._id} className="text-center">
+                        <td className="border px-4 py-2">{blog.title}</td>
+                        <td className="border px-4 py-2">{blog.category}</td>
+                        <td className="border px-4 py-2">
+                          <img
+                            src={`${import.meta.env.VITE_API_URL}/images/${blog.image}`}
+                            alt={blog.title}
+                            className="w-16 h-16 object-cover mx-auto"
+                          />
+                        </td>
+                        <td
+                          className="border px-4 py-2 cursor-pointer"
+                          onClick={() => removeBlog(blog._id)}
+                        >
+                          X
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="4" className="text-center">
+                        No blogs found.
                       </td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>

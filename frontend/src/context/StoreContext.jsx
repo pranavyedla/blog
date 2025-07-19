@@ -4,24 +4,26 @@ export const StoreContext = createContext(null);
 const StoreContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [blogData, setBlogData] = useState([]);
+  //console.log("user", user);
+  //console.log("blogData", blogData);
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(storedUser);
+      setUser(storedUser);  
     }
   }, []);
 
   useEffect(() => {
-    const allBolgs = async () => {
+    const allBlogs = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/blog/all");
-
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/blog/all`);
+        //console.log("res", res.data.blogs);
         setBlogData(res.data.blogs);
       } catch (error) {
         console.log("error in all blogs api", error);
       }
     };
-    allBolgs();
+    allBlogs();
   }, []);
 
   const loginUser = (user, token) => {
