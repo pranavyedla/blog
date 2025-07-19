@@ -5,10 +5,10 @@ const LatestBlogs = () => {
   const { blogData } = useContext(StoreContext);
   return (
     <div>
-      <h1 className="text-3xl my-3 text-gray-700 font-bold text-center sm:text-start">
+      <h1 className="text-3xl my-3 text-gray-700 font-bold text-center sm:text-start px-10 py-5">
         Latest Blogs
       </h1>
-      <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 px-3 sm:px-4">
+      <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:px-10">
         {blogData
           .slice(-6)
           .reverse()

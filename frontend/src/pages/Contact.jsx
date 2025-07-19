@@ -5,7 +5,7 @@ const Contact = () => {
       <h1 className="text-center text-3xl uppercase font-bold my-8">Contact</h1>
       <p className="text-gray-700 text-lg leading-relaxed max-w-2xl mx-auto my-6">
         {" "}
-        Welcome to <span className="text-blue-600 font-semibold ">MyBlog</span>,
+        Welcome to <span className="text-blue-600 font-semibold ">Meta Blog</span>,
         your go-to platform for insightful articles on technology, lifestyle,
         and beyond. Our mission is to share knowledge and inspire creativity
         through engaging and well-researched content. Whether you're a tech
@@ -13,7 +13,7 @@ const Contact = () => {
         we've got something for you!
       </p>
       <div>
-        <img src={assets.contact} alt="" />
+        <img src={assets.contact_us} alt="" />
       </div>
     </div>
   );
