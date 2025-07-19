@@ -18,7 +18,8 @@ app.use(
     credentials: true,
   })
 );
-
+app.use(express.urlencoded({ extended: true }));
+// File upload middleware 
 // API ENDPOINTS
 app.use("/images", express.static("uploads"));
 app.use("/user", userRoutes);
