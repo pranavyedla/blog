@@ -12,7 +12,13 @@ app.get("/", (req, res) => {
 });
 // middlewares
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173", // allow Vite dev server during development
+    credentials: true,
+  })
+);
+
 // API ENDPOINTS
 app.use("/images", express.static("uploads"));
 app.use("/user", userRoutes);
