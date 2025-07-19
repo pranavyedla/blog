@@ -20,7 +20,7 @@ const SingleBlog = () => {
       <p className="text-[#4B6BFB]">{blog.category}</p>
       <p>{blog.description}</p>
       <div className="flex gap-2 items-center justify-center">
-        <p className="text-lg font-bold">Author:{blog.author.name}</p>
+        <p className="text-lg font-bold">By {blog.author.name}</p>
         <img
           className="w-8 h-8 rounded-full"
           src={`http://localhost:4000/images/${blog.author.image}`}
