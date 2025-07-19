@@ -23,7 +23,7 @@ const Login = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        "${import.meta.env.VITE_API_URL}/user/login",
+        `${import.meta.env.VITE_API_URL}/user/login`,
         formData,
         {
           headers: {
