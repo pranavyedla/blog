@@ -6,6 +6,10 @@ import userRoutes from "./routes/user.routes.js";
 import blogRoutes from "./routes/blog.routes.js";
 dotenv.config();
 const app = express();
+// Root route (add this here)
+app.get("/", (req, res) => {
+  res.send("Backend API is live!");
+});
 // middlewares
 app.use(express.json());
 app.use(cors());
