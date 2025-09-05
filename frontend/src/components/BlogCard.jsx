@@ -16,7 +16,6 @@ const BlogCard = ({
           alt=""
           className="flex items-center justify-center w-full mx-auto cursor-pointer transform duration-300 hover:scale-105"
         />
-      </Link>
       <p className="text-[#4B6BFB] font-semibold my-3 ">{category}</p>
       <h1 className="text-xl font-bold">{title}</h1>
       <div className="flex gap-3 items-center my-3">
@@ -34,6 +33,7 @@ const BlogCard = ({
           })}
         </p>
       </div>
+      </Link>
     </div>
   );
 };
